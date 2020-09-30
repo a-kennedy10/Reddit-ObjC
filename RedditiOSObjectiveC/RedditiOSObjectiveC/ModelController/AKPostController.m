@@ -29,14 +29,15 @@
 }
 
 //MARK: - fetch
-- (void)searchForPostWithSearchTerm:(NSString *)searchTerm completion:(void (^)(NSArray<AKPost *> * _Nonnull, NSError * _Nonnull))completion
+- (void)searchForPostWithSearchTerm:(NSString *)searchTerm completion:(void (^)(NSArray<AKPost *> *, NSError *))completion
 {
     // built url, that the user searches with the json extension
     NSURL *searchURL = [self baseURL];
     searchURL = [searchURL URLByAppendingPathComponent:searchTerm];
-    searchURL = [searchURL URLByAppendingPathExtension:@"json"];
+    NSURL *finalURL = [searchURL URLByAppendingPathExtension:@"json"];
+    NSLog(@"%@", finalURL);
     
-    [[[NSURLSession sharedSession] dataTaskWithURL:searchURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    [[[NSURLSession sharedSession] dataTaskWithURL:finalURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         // error handling
         if (error)
@@ -62,21 +63,23 @@
             completion(nil, error);
             return;
         }
+        // now that we have access to the top level dictionary (jsonDictionary) we can subscript and drill down into the data, to get access to the data we need
+        NSDictionary *postData = jsonDictionary[@"data"];
+        NSArray *childrenArray = postData[@"children"];
+        // the last json "layer" was already created in our model implementation
         
-        NSDictionary *postDataDictionaries = jsonDictionary[@"data"];
-        NSArray *childrenArray = postDataDictionaries[@"children"];
         //we need a placeholder array so we can complete with the type of object that we defined ([AKPost])
         NSMutableArray *postsArray = [NSMutableArray array];
         
         for (NSDictionary *dataDictionary in childrenArray)
         {
             AKPost *post = [[AKPost alloc] initwithDictionary:dataDictionary];
+            //add objects to the created post array
             [postsArray addObject:post];
         }
         
         completion(postsArray, nil);
-        
-        
+                
     }]resume];
 }
 

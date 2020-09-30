@@ -4,7 +4,7 @@
 //
 //  Created by Alex Kennedy on 9/30/20.
 //  Copyright © 2020 Alex Kennedy. All rights reserved.
-//
+// https://www.reddit.com/r/funny.json
 
 #import "AKPost.h"
 
@@ -35,8 +35,6 @@
     
     return [self initWithTitle:title ups:ups commentCount:commentCount];
 }
-
-
 
 //MARK: - keys
 

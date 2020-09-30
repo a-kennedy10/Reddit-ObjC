@@ -17,7 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedController;
 
--(void)searchForPostWithSearchTerm:(NSString *)searchTerm completion:(void (^) (NSArray<AKPost *> *posts, NSError *error))completion;
+// void means we arent returning anything out of the function
+-(void)searchForPostWithSearchTerm:(NSString *)searchTerm
+                        completion:(void (^) (NSArray<AKPost *> *posts, NSError *error))completion;
     // ABOVE - either come back with an array of post, or an error 
 
 @end

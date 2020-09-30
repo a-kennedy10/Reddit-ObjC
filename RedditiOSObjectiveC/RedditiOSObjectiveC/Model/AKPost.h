@@ -20,8 +20,14 @@ NS_ASSUME_NONNULL_BEGIN
                          ups:(NSInteger)ups
                 commentCount:(NSNumber *)commentCount;
 
+@end
+
+@interface AKPost (JSONConvertable)
+
 -(instancetype)initwithDictionary:(NSDictionary *)dictionary;
 
+
 @end
+
 
 NS_ASSUME_NONNULL_END
